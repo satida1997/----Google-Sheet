@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ร้านสาธิดาที่รัก - สั่งอาหารออนไลน์</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 min-h-screen flex flex-col">
+  <header class="bg-yellow-400 shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
+    <div class="text-2xl font-bold text-white">ร้านสาธิดาที่รัก </div>
+    <nav class="space-x-6 text-white font-medium hidden md:flex">
+      <a href="#" class="hover:underline">หน้าแรก</a>
+      <a href="#menu" class="hover:underline">เมนูอาหาร</a>
+      <a href="#order" class="hover:underline">สั่งซื้อ</a>
+      <a href="#contact" class="hover:underline">ติดต่อ</a>
+    </nav>
+  </header>
+
+  <section class="relative bg-yellow-200 text-yellow-900 p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12">
+    <div class="flex-1">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">สั่งอาหารง่ายๆ จากร้านเรา</h1>
+      <p class="text-lg mb-6">เมนูอร่อยพร้อมเสิร์ฟถึงโต๊ะคุณ แค่สแกน QR และเลือกเมนูได้เลย</p>
+      <a href="#menu" class="bg-yellow-500 text-yellow-900 font-semibold py-3 px-6 rounded-lg shadow hover:bg-yellow-600 transition">ดูเมนูอาหาร</a>
+    </div>
+    <div class="flex-1 max-w-md">
+      <img src="https://i.postimg.cc/PrtwzXtz/image.jpg" alt="เมนูพิเศษวันนี้ต้มเนื้อ" class="rounded-3xl shadow-lg" />
+    </div>
+  </section>
+
+  <section id="menu" class="max-w-4xl mx-auto my-12 px-6">
+    <h2 class="text-3xl font-bold mb-8 text-yellow-800 text-center">เมนูอาหาร</h2>
+    <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+  </section>
+
+  <section id="order" class="max-w-4xl mx-auto my-12 px-6 bg-yellow-50 rounded-xl shadow-lg p-6">
+    <h2 class="text-3xl font-bold mb-6 text-yellow-800 text-center">สรุปรายการสั่งซื้อ</h2>
+    <div id="order-list" class="space-y-3 mb-6">
+      <p class="text-gray-600 italic text-center">ยังไม่มีรายการสั่งซื้อ</p>
+    </div>
+    <button id="submit-order-btn" disabled class="w-full bg-yellow-400 text-yellow-900 font-bold py-3 rounded-lg shadow hover:bg-yellow-500 transition disabled:opacity-50 disabled:cursor-not-allowed">
+      ส่งคำสั่งซื้อ
+    </button>
+  </section>
+
+  <footer id="contact" class="bg-yellow-400 text-yellow-900 py-6 text-center mt-auto">
+    <p>ร้านสาธิต © 2025 | ติดต่อเรา: 012-345-6789 | อีเมล: info@demo.com</p>
+    <p class="mt-2">ติดตามเราใน
+      <a href="#" class="underline hover:text-yellow-600">Facebook</a> |
+      <a href="#" class="underline hover:text-yellow-600">Instagram</a>
+    </p>
+  </footer>
+
+  <script>
+    const menu = [
+      { id: 1, name: 'กระเพราหมูกรอบ', price: 60, image: 'https://i.postimg.cc/rFzmgKrT/image.jpg', type: 'food' },
+      { id: 2, name: 'ผัดไทยกุ้งสด', price: 50, image: 'https://i.postimg.cc/qMXTsrmr/image.jpg', type: 'food' },
+      { id: 3, name: 'ข้าวหมูทอด', price: 55, image: 'https://i.postimg.cc/NG2GrWqG/image.jpg', type: 'food' },
+      { id: 4, name: 'ข้าวผัดกุ้ง', price: 65, image: 'https://i.postimg.cc/k4tCKmbQ/image.jpg', type: 'food' },
+      { id: 5, name: 'สุกี้ทะเล', price: 70, image: 'https://i.postimg.cc/0yWhnyDT/image.jpg', type: 'food' },
+      { id: 6, name: 'ชาเขียวเย็น', price: 30, image: 'https://i.postimg.cc/nhPw7wtZ/image.jpg', type: 'drink' },
+      { id: 7, name: 'โค้ก', price: 25, image: 'https://i.postimg.cc/C5SvY3bC/coke.webp', type: 'drink' },
+      { id: 8, name: 'น้ำเปล่า', price: 15, image: 'https://i.postimg.cc/RF6RmM3n/crystal.jpg', type: 'drink' }
+    ];
+
+    const menuListDiv = document.getElementById('menu-list');
+    const orderListDiv = document.getElementById('order-list');
+    const submitBtn = document.getElementById('submit-order-btn');
+    let order = {};
+
+    function renderMenu() {
+      menu.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row cursor-pointer hover:shadow-2xl transition duration-300';
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="w-full md:w-40 h-40 object-cover" />
+          <div class="p-4 flex flex-col justify-between flex-grow">
+            <div>
+              <h3 class="text-xl font-semibold text-yellow-900">${item.name}</h3>
+              <p class="mt-1 text-yellow-700 font-bold">${item.price} บาท</p>
+            </div>
+            <div class="mt-4 flex items-center gap-2">
+              <button onclick="removeFromOrder(${item.id})" class="bg-red-300 hover:bg-red-400 text-white px-3 py-1 rounded-full text-lg font-bold shadow">−</button>
+              <span id="qty-${item.id}" class="font-semibold text-yellow-800">0</span>
+              <button onclick="addToOrder(${item.id})" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-3 py-1 rounded-full text-lg font-bold shadow">+</button>
+            </div>
+          </div>
+        `;
+        menuListDiv.appendChild(card);
+      });
+    }
+
+    function addToOrder(id) {
+      if (!order[id]) order[id] = 0;
+      order[id]++;
+      updateOrderDisplay();
+    }
+
+    function removeFromOrder(id) {
+      if (order[id]) {
+        order[id]--;
+        if (order[id] <= 0) delete order[id];
+        updateOrderDisplay();
+      }
+    }
+
+    function updateOrderDisplay() {
+      menu.forEach(item => {
+        document.getElementById(`qty-${item.id}`).textContent = order[item.id] || 0;
+      });
+
+      orderListDiv.innerHTML = '';
+      const items = Object.keys(order);
+      if (items.length === 0) {
+        orderListDiv.innerHTML = '<p class="text-gray-600 italic text-center">ยังไม่มีรายการสั่งซื้อ</p>';
+        submitBtn.disabled = true;
+        return;
+      }
+
+      let total = 0;
+      items.forEach(id => {
+        const menuItem = menu.find(item => item.id == id);
+        const qty = order[id];
+        total += menuItem.price * qty;
+        const orderItem = document.createElement('div');
+        orderItem.className = 'flex justify-between items-center bg-yellow-100 rounded-lg p-3 shadow';
+        orderItem.innerHTML = `<div><span class="font-semibold text-yellow-900">${menuItem.name}</span> x ${qty}</div><div class="font-bold text-yellow-900">${menuItem.price * qty} บาท</div>`;
+        orderListDiv.appendChild(orderItem);
+      });
+
+      const totalDiv = document.createElement('div');
+      totalDiv.className = 'text-right font-bold text-yellow-900 mt-4 text-xl';
+      totalDiv.textContent = `รวมทั้งหมด: ${total} บาท`;
+      orderListDiv.appendChild(totalDiv);
+      submitBtn.disabled = false;
+    }
+
+    submitBtn.addEventListener('click', () => {
+      const orderData = Object.keys(order).map(id => {
+        const item = menu.find(m => m.id == id);
+        return {
+          name: item.name,
+          qty: order[id],
+          price: item.price,
+          total: item.price * order[id]
+        };
+      });
+
+      fetch('https://script.google.com/macros/s/AKfycbyCj5vQ96E46JTb3U2-8Inp22uJm_eZZE8PmpBL9tos8LSPaU4W7YzC4dnXe9e6Q-Rsew/exec', {
+  method: 'POST',
+  body: JSON.stringify({ order: orderData }),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+      .then(response => response.text())
+      .then(result => {
+        alert('ส่งคำสั่งซื้อเรียบร้อยแล้ว ขอบคุณค่ะ');
+        order = {};
+        updateOrderDisplay();
+      })
+      .catch(error => {
+        alert('เกิดข้อผิดพลาด: ' + error);
+      });
+    });
+
+    renderMenu();
+    updateOrderDisplay();
+  </script>
+</body>
+</html>
